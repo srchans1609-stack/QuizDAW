@@ -1,19 +1,9 @@
-# Guion - Punto 1: Explicación de los cambios
+# Explicación de los cambios realizados
 
-Aquí tienes dos formas de explicar los cambios al profesor. Elige la que mejor se adapte a tu forma de hablar.
+## 1. Corrección del prefijo en las cookies
+* **Problema:** Las partidas no se guardaban correctamente porque las funciones de lectura buscaban la cookie empleando un prefijo específico (`quiz_`), pero la función encargada de guardarla la creaba directamente sin incluir dicho prefijo.
+* **Solución:** Se añadió la constante `PREFIJO` dentro de la función de guardado (`guardarCookie`) para que el nombre coincida de forma exacta con el que busca el sistema al leerla.
 
-## Opción 1: Explicación natural y directa
-
-"Profe, te explico dos arreglos importantes que tuve que hacer para que el juego guardara bien las partidas:
-
-1. **El problema con el nombre de las cookies:** Al guardar la cookie de las partidas, no le estaba poniendo el prefijo `quiz_`, pero al intentar leerla el código sí que lo buscaba. Como no se llamaban igual, nunca encontraba los datos. Lo arreglé añadiendo la variable `PREFIJO` en la función de guardar.
-2. **El fallo al leer el JSON:** Cuando leía los datos de la cookie, llegaban como objetos planos y perdían las funciones de mi clase `Partida` (como `.resumen()`). Lo solucioné usando `.map()` para coger esos datos y volver a instanciar objetos `Partida` reales, recuperando así sus funciones."
-
----
-
-## Opción 2: Explicación un poco más técnica
-
-"He solucionado varios errores para que la persistencia de datos funcione correctamente. Destaco estos dos:
-
-1. **Sincronización del prefijo en cookies:** Había un fallo en `cookies.js` donde `guardarCookie` no incluía la constante `PREFIJO` (`quiz_`), haciendo que `leerCookie` devolviera vacío. Lo corregí concatenando el prefijo en el `document.cookie`.
-2. **Reinstanciación de objetos JSON:** Al hacer un `JSON.parse` de la cookie, obteníamos objetos genéricos sin los métodos de la clase `Partida`. Para poder imprimir la tabla, tuve que mapear el array resultante pasándole los parámetros al constructor `new Partida(...)` para poder volver a ejecutar `p.resumen()` sin que diese error."
+## 2. Reinstanciación de objetos con la clase Partida
+* **Problema:** Al recuperar el array de partidas desde la cookie mediante `JSON.parse()`, los datos se convertían en objetos planos genéricos que perdían los métodos de la clase `Partida` (como `.resumen()`), provocando errores al intentar ejecutarlos.
+* **Solución:** Se implementó un método `.map()` en la función de pintado para transformar cada objeto plano recuperado en una instancia oficial de la clase `Partida`, permitiendo usar sus métodos con normalidad.
